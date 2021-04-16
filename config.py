@@ -2,7 +2,7 @@
 CUSTOMER=20
 
 # Number of transaction < 89,999
-TRANSCATION=500
+TRANSACTION=500
 
 # Transaction date range (String, ddmmyyyyhhmm)
 START_DATE='010120210000'

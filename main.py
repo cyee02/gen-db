@@ -9,7 +9,7 @@ import config
 table_names = config.TABLE_NAMES
 table_infos = config.TABLE_INFO
 num_cust_id = config.CUSTOMER
-num_transaction = config.TRANSCATION
+num_transaction = config.TRANSACTION
 current_year = config.CURRENT_YEAR
 start_date = config.START_DATE
 end_date = config.END_DATE

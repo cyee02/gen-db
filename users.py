@@ -17,6 +17,9 @@ fake = Faker()
 gender = ["male", "female"]
 email_provider = ["gmail", "yahoo", "hotmail"]
 age_range = range(22, 91)
+LETTERS_LOWER = string.ascii_lowercase
+NUMBERS = string.digits
+printable_lower = list(f'{LETTERS_LOWER}{NUMBERS}')
 
 
 def gen_email(first_name):
@@ -76,6 +79,20 @@ def gen_phone_number(num_cust_id):
     return number_lst
 
 
+# Generate accountKey
+def gen_accountKey(num_cust_id):
+    sequence = [8, 4, 4, 4, 11]
+    key_lst = []
+    for row in range(0, num_cust_id):
+        random_password = []
+        for num in sequence:
+          seq = ''.join(random.choices(printable_lower, k=num))
+          random_password.append(seq)
+        random_password = '-'.join(random_password)
+        key_lst.append(random_password)
+    return key_lst
+
+
 # Create pandas dataframe
 def create_df(num_cust_id, current_year):
     # Initialize variables
@@ -92,6 +109,7 @@ def create_df(num_cust_id, current_year):
     data["age"] = nric[1]
     data["address"] = gen_address(num_cust_id)
     data["phoneNumber"] = gen_phone_number(num_cust_id)
+    data["accountKey"] = gen_accountKey(num_cust_id)
     return pd.DataFrame(data=data)
 
 
@@ -113,7 +131,8 @@ def create(num_cust_id, current_year):
                 'nric': row[5],
                 'age': row[6],
                 'address': row[7],
-                'phoneNumber': row[8]
+                'phoneNumber': row[8],
+                'accountKey': row[9]
             }
             table.put_item(Item=item)
         print("Write to {}: Success".format(table_name))

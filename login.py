@@ -17,7 +17,6 @@ NUMBERS = string.digits
 PUNCTUATION = "!$%&_"
 # create alphanumerical from string constants
 printable = list(f'{LETTERS}{NUMBERS}{PUNCTUATION}')
-printable_lower = list(f'{LETTERS_LOWER}{NUMBERS}')
 
 
 # Generate userPass
@@ -40,27 +39,12 @@ def gen_username(num_cust_id):
     return(username_lst)
 
 
-# Generate accountKey
-def gen_accountKey(num_cust_id):
-    sequence = [8, 4, 4, 4, 11]
-    key_lst = []
-    for row in range(0, num_cust_id):
-        random_password = []
-        for num in sequence:
-          seq = ''.join(random.choices(printable_lower, k=num))
-          random_password.append(seq)
-        random_password = '-'.join(random_password)
-        key_lst.append(random_password)
-    return key_lst
-
-
 # Create pandas dataframe
 def create_df(num_cust_id):
     data = {}
     data["custID"] = range(1, num_cust_id+1)
     data["userName"] = gen_username(num_cust_id)
     data["userPass"] = gen_password(num_cust_id)
-    data["accountKey"] = gen_accountKey(num_cust_id)
     return pd.DataFrame(data=data)
 
 
@@ -76,8 +60,7 @@ def create(num_cust_id):
             item = {
                 'custID': row[0],
                 'userName': row[1],
-                'userPass': row[2],
-                'accountKey': row[3]
+                'userPass': row[2]
             }
             table.put_item(Item=item)
         print("Write to {}: Success".format(table_name))

@@ -5,6 +5,7 @@ import string
 import time
 import boto3
 import sys
+from decimal import Decimal
 
 # Initialize boto3 client
 dynamo = boto3.resource('dynamodb')
@@ -17,18 +18,18 @@ categories = ["Transport", "Food", "Shopping", "Entertainment", "Insurance", "Ot
 message = ["Thanks", "Lunch", "Dinner", "thank you", "", "", "", "", "DBS", "Breakfast"]
 format = '%d%m%Y%H%M'
 
-# Generate list of random unique ids
-def gen_transaction_id(num_rows):
-    id_lst = []
-    # Transaction id is 5 digit
-    range_lst = list(range(10000, 100000))
+# # Generate list of random unique ids
+# def gen_transaction_id(num_rows):
+#     id_lst = []
+#     # Transaction id is 5 digit
+#     range_lst = list(range(10000, 100000))
 
-    # remove id from list so there is no transaction id duplicates
-    for row in range(0, num_rows):
-        id = random.choice(range_lst)
-        range_lst.remove(id)
-        id_lst.append(id)
-    return id_lst
+#     # remove id from list so there is no transaction id duplicates
+#     for row in range(0, num_rows):
+#         id = random.choice(range_lst)
+#         range_lst.remove(id)
+#         id_lst.append(id)
+#     return id_lst
 
 
 # Generate list of random transaction amount
@@ -67,12 +68,12 @@ def gen_date(start, end, format):
     etime = time.mktime(time.strptime(end, format))
 
     # Output as epoch
-    ptime = stime + prop * (etime - stime)
+    ptime = round(stime + prop * (etime - stime))
 
     # # To output as specific format instead of epoch
-    output_format = '%d/%m/%Y %H:%M'
+    # output_format = '%Y-%m-%dT%H:%M:%S%'
     # output_format = '%d %b %Y %H:%M'
-    ptime = time.strftime(output_format, time.localtime(ptime))
+    # ptime = str(time.strftime(output_format, time.localtime(ptime)))
 
     return ptime
 
@@ -114,7 +115,7 @@ def create_df(start_date, end_date, num_cust_id, num_rows):
     cp = gen_cp_id(num_cust_id, num_rows)
     # Write to csv
     data = {}
-    data["transactionID"] = gen_transaction_id(num_rows)
+    data["transactionID"] = range(1, num_rows+1)
     data["amount"] = gen_amount(proximity, num_rows)
     data["custID"] = cp[0]
     data["datetime"] = gen_date_list(start_date, end_date, format, num_rows)
@@ -128,7 +129,6 @@ def create_df(start_date, end_date, num_cust_id, num_rows):
 # Generate random variables and push to AWS dynamoDB
 def create(start_date, end_date, num_cust_id, num_rows):
     df = create_df(start_date, end_date, num_cust_id, num_rows)
-    np = df.to_numpy()
 
     # Write row by row to dynamoDB
     np = df.to_numpy()

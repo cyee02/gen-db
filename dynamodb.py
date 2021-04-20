@@ -47,10 +47,6 @@ def reset_table(table_names, table_infos):
                 continue
             attribute.pop('AttributeType')
 
-    # print("Key List:\n", key_lst)
-    # print("Attribute List:\n", att_lst)
-    # print("Table info:\n", table_infos)
-
     print("=== Deleting Table ===")
     # Remove all tables
     for table in table_names:
@@ -86,7 +82,7 @@ def reset_table(table_names, table_infos):
             return False
 
     # Buffer time to create table
-    print("Buffer for 20s")
-    time.sleep(20)
+    print("Buffer for 10s")
+    time.sleep(10)
     print("New tables ready")
     return True

@@ -2,6 +2,7 @@ import pandas as pd
 import random
 import boto3
 import sys
+from decimal import Decimal
 
 # Initialize boto3 client
 dynamo = boto3.resource('dynamodb')
@@ -27,12 +28,12 @@ def gen_accname_custid_linked(num_rows, num_cust_id):
             mult_id += 1
             cust_id.append(mult_id)
             account_name.append("Multiplier Account")
-            linked.append(random.choice([True, False]))
+            linked.append(True)
         elif num <= num_cust_id*3:
             sav_id += 1
             cust_id.append(sav_id)
             account_name.append("Saving Account")
-            linked.append(random.choice([True, False]))
+            linked.append(False)
     return [account_name, cust_id, linked]
 
 
@@ -47,7 +48,7 @@ def gen_acc_number(num_rows):
 def gen_balance(num_rows):
     available_bal = []
     for num in range(0, num_rows):
-        available_bal.append('%.2f'%(random.random()*10000.00))
+        available_bal.append(Decimal('88888.88'))
     return available_bal
 
 
